@@ -14,7 +14,7 @@ class LectureService(val lectureRepository: LectureRepository) {
     }
 
     fun get(date: LocalDateTime): List<Lecture> {
-        return lectureRepository.findLectureByDateEquals(date)
+        return lectureRepository.findLectureByDateEquals(date).filter {it -> it.registeredNumber < 30}
     }
 
     fun get(lectureRegistrations: List<LectureRegistration>): List<Lecture> {
