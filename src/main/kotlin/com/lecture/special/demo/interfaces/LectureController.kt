@@ -3,17 +3,15 @@ package com.lecture.special.demo.interfaces
 import com.lecture.special.demo.application.LectureFacade
 import com.lecture.special.demo.application.LectureService
 import com.lecture.special.demo.domain.Lecture
+import com.lecture.special.demo.domain.dto.request.LectureRequest
 import com.lecture.special.demo.domain.dto.request.RegistrationRequest
 import com.lecture.special.demo.domain.dto.response.RegistrationResponse
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
-@RestController(value = "/lecture")
+@RestController
+@RequestMapping("/lectures")
 class LectureController(
     val lectureFacade: LectureFacade,
     val lectureService: LectureService
@@ -27,15 +25,15 @@ class LectureController(
     }
 
     //특강 선택 API
-    @PostMapping
-    fun getAvailableLectures(@RequestBody date : LocalDateTime): List<Lecture> {
-        return lectureService.get(date)
+    @PostMapping("/available")
+    fun getAvailableLectures(@RequestBody request: LectureRequest): ResponseEntity<List<Lecture>> {
+        return ResponseEntity.ok(lectureService.get(request.date))
     }
 
     //특강 신청 완료 목록 조회 API
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     fun getLectures(@PathVariable id: Long): List<Lecture> {
-        return lectureFacade.getAvailable(id)
+        return lectureFacade.getRegistered(id)
     }
 
 }
