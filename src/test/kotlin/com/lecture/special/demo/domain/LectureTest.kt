@@ -15,7 +15,7 @@ class LectureTest {
     @DisplayName("등록된 수강자 수가 30이하면 유효성 검사에 성공한다.")
     @Test
     fun `Lecture Construction should be succeeded when registeredNumber is 30`() {
-        val lecture = Lecture("name", "lecturer", LocalDateTime.now())
+        val lecture = Lecture("name", "lecturer", LocalDateTime.now(), 30)
         val violations = validator.validate(lecture)
 
         assertEquals(0, violations.size)
@@ -24,7 +24,7 @@ class LectureTest {
     @DisplayName("등록된 수강자 수가 30이 넘으면 유효성 검사에 실패한다.")
     @Test
     fun `Lecture Construction should be failed when registeredNumber is 31`() {
-        val lecture = Lecture("name", "lecturer", LocalDateTime.now())
+        val lecture = Lecture("name", "lecturer", LocalDateTime.now(), 31)
         val violations = validator.validate(lecture)
 
         assertEquals(1, violations.size)
