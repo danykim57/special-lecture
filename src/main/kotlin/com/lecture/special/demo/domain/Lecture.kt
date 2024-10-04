@@ -8,7 +8,8 @@ import java.time.LocalDateTime
 class Lecture(
     name: String,
     lecturer: String,
-    registeredDate: LocalDateTime
+    registeredDate: LocalDateTime,
+    registeredNumber: Int
 ) {
 
     @Id
@@ -26,7 +27,7 @@ class Lecture(
 
     @Column
     @field:Max(30, message = "수강자 수가 30 이하여야 합니다.")
-    var registeredNumber: Int = 0
+    var registeredNumber: Int = registeredNumber
         protected set
 
     @Column
