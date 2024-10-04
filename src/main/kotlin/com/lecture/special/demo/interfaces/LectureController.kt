@@ -19,17 +19,20 @@ class LectureController(
     val lectureService: LectureService
 ) {
 
+    //특강 신청 API
     @PostMapping("/apply")
     fun apply(@Valid @RequestBody request:RegistrationRequest): RegistrationResponse {
         val bool = lectureFacade.register(request.userId, request.lectureId)
         return RegistrationResponse(bool.toString())
     }
 
+    //특강 선택 API
     @PostMapping
     fun getAvailableLectures(@RequestBody date : LocalDateTime): List<Lecture> {
         return lectureService.get(date)
     }
 
+    //특강 신청 완료 목록 조회 API
     @GetMapping("{id}")
     fun getLectures(@PathVariable id: Long): List<Lecture> {
         return lectureFacade.getAvailable(id)
