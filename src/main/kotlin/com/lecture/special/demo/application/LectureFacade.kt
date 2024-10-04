@@ -1,5 +1,6 @@
 package com.lecture.special.demo.application
 
+import com.lecture.special.demo.common.exception.ExceedRegistration
 import com.lecture.special.demo.domain.Lecture
 import jakarta.transaction.Transactional
 import org.slf4j.LoggerFactory
@@ -18,18 +19,23 @@ class LectureFacade(
         val user = userService.get(userId)
         var lecture = lectureService.get(lectureId)
         lecture.incrementRegisteredNumber()
+        val lectureRegistration = lectureRegistrationService.get(userId)
+        if (lectureRegistration != null && lectureRegistration.map {it -> it.registerId.lectureId}.contains(lectureId)) {
+            //should throw exception
+            throw ExceedRegistration()
+        }
         if (lecture.registeredNumber > lecture.maxRegisteredNumber) {
-            log.warn("특강 신청 실패: lecture id: {}", lecture.id)
-            return false
+            //should throw exception
+            throw ExceedRegistration()
         }
         var result = lectureService.save(lecture)
         lectureRegistrationService.save(user, result)
         return true
     }
 
-    fun getAvailable(userId: Long): List<Lecture> {
+    fun getRegistered(userId: Long): List<Lecture> {
         val lectureRegistrations = lectureRegistrationService.get(userId);
-        val lectures = lectureService.get(lectureRegistrations).filter {it -> it.registeredNumber < 30}
+        val lectures = lectureService.get(lectureRegistrations)
         return lectures
     }
 }
